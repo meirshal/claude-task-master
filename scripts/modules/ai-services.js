@@ -21,12 +21,12 @@ const useBedrock = process.env.USE_BEDROCK === '1';
 const anthropic = useBedrock
 	? new AnthropicBedrock()
 	: new Anthropic({
-		apiKey: process.env.ANTHROPIC_API_KEY,
-		// Add beta header for 128k token output
-		defaultHeaders: {
-			'anthropic-beta': 'output-128k-2025-02-19'
-		}
-	});
+			apiKey: process.env.ANTHROPIC_API_KEY,
+			// Add beta header for 128k token output
+			defaultHeaders: {
+				'anthropic-beta': 'output-128k-2025-02-19'
+			}
+		});
 
 // Lazy-loaded Perplexity client
 let perplexity = null;
@@ -968,8 +968,8 @@ function generateComplexityAnalysisPrompt(tasksData) {
 	return `Analyze the complexity of the following tasks and provide recommendations for subtask breakdown:
 
 ${tasksData.tasks
-			.map(
-				(task) => `
+	.map(
+		(task) => `
 Task ID: ${task.id}
 Title: ${task.title}
 Description: ${task.description}
@@ -977,8 +977,8 @@ Details: ${task.details}
 Dependencies: ${JSON.stringify(task.dependencies || [])}
 Priority: ${task.priority || 'medium'}
 `
-			)
-			.join('\n---\n')}
+	)
+	.join('\n---\n')}
 
 Analyze each task and return a JSON array with the following structure for each task:
 [
