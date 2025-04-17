@@ -6,6 +6,7 @@
 // NOTE/TODO: Include the beta header output-128k-2025-02-19 in your API request to increase the maximum output token length to 128k tokens for Claude 3.7 Sonnet.
 
 import { Anthropic } from '@anthropic-ai/sdk';
+import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import { CONFIG, log, sanitizePrompt, isSilentMode } from './utils.js';
@@ -15,14 +16,17 @@ import chalk from 'chalk';
 // Load environment variables
 dotenv.config();
 
+const useBedrock = process.env.USE_BEDROCK === '1';
 // Configure Anthropic client
-const anthropic = new Anthropic({
-	apiKey: process.env.ANTHROPIC_API_KEY,
-	// Add beta header for 128k token output
-	defaultHeaders: {
-		'anthropic-beta': 'output-128k-2025-02-19'
-	}
-});
+const anthropic = useBedrock
+	? new AnthropicBedrock()
+	: new Anthropic({
+		apiKey: process.env.ANTHROPIC_API_KEY,
+		// Add beta header for 128k token output
+		defaultHeaders: {
+			'anthropic-beta': 'output-128k-2025-02-19'
+		}
+	});
 
 // Lazy-loaded Perplexity client
 let perplexity = null;
@@ -964,8 +968,8 @@ function generateComplexityAnalysisPrompt(tasksData) {
 	return `Analyze the complexity of the following tasks and provide recommendations for subtask breakdown:
 
 ${tasksData.tasks
-	.map(
-		(task) => `
+			.map(
+				(task) => `
 Task ID: ${task.id}
 Title: ${task.title}
 Description: ${task.description}
@@ -973,8 +977,8 @@ Details: ${task.details}
 Dependencies: ${JSON.stringify(task.dependencies || [])}
 Priority: ${task.priority || 'medium'}
 `
-	)
-	.join('\n---\n')}
+			)
+			.join('\n---\n')}
 
 Analyze each task and return a JSON array with the following structure for each task:
 [

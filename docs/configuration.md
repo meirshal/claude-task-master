@@ -19,6 +19,7 @@ Task Master can be configured through environment variables in a `.env` file at 
 - `PROJECT_VERSION` (Default: `"1.0.0"`): Version in metadata (Example: `PROJECT_VERSION=2.1.0`)
 - `PERPLEXITY_API_KEY`: For research-backed features (Example: `PERPLEXITY_API_KEY=pplx-...`)
 - `PERPLEXITY_MODEL` (Default: `"sonar-medium-online"`): Perplexity model (Example: `PERPLEXITY_MODEL=sonar-large-online`)
+- `USE_BEDROCK`: For using AWS Bedrock hosted Anthropic models (Example: `USE_BEDROCK=1`)
 
 ## Example .env File
 
